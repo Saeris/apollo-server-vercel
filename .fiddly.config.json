@@ -1,0 +1,9 @@
+{
+	"name": "📐 Apollo Server Now",
+	"description": "Production-ready Node.js GraphQL server for Zeit Now Serverless Functions",
+	"noHeader": true,
+	"homepage:": "http://saeris.io",
+	"repo": "https://github.com/saeris/apollo-server-now",
+	"favicon": "static/favicon.ico",
+	"styles": "styles/styles.css"
+}

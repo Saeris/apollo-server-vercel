@@ -1,0 +1,101 @@
+{
+  "name": "@saeris/apollo-server-now",
+  "description": "Production-ready Node.js GraphQL server for Zeit Now Serverless Functions",
+  "version": "1.0.0",
+  "keywords": [
+    "GraphQL",
+    "Apollo",
+    "Server",
+    "Now",
+    "Javascript"
+  ],
+  "author": "Drake Costa <drake@saeris.io> (https://github.com/Saeris/)",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/saeris/apollo-server-now.git"
+  },
+  "homepage": "https://github.com/saeris/apollo-server-now#readme",
+  "bugs": {
+    "url": "https://github.com/saeris/apollo-server-now/issues"
+  },
+  "main": "src/index.js",
+  "scripts": {
+    "build": "pika build",
+    "build:docs": "fiddly",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint ./src/**/*.{js,ts}",
+    "test": "yarn lint && yarn typecheck && jest -c ./jest.config.js",
+    "test:watch": "jest -c ./jest.config.js --watch",
+    "test:coverage": "jest -c ./jest.config.js && codecov",
+    "release": "pika publish",
+    "version": "npm run build"
+  },
+  "dependencies": {
+    "@apollographql/graphql-playground-html": "1.6.24",
+    "@now/node": "^1.5.0",
+    "apollo-server-core": "^2.11.0",
+    "apollo-server-env": "^2.4.3",
+    "apollo-server-types": "^0.3.0",
+    "graphql-tools": "^4.0.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.9.0",
+    "@babel/node": "^7.8.7",
+    "@babel/plugin-proposal-class-properties": "^7.8.3",
+    "@babel/plugin-proposal-object-rest-spread": "^7.9.0",
+    "@babel/preset-env": "^7.9.0",
+    "@babel/preset-typescript": "^7.9.0",
+    "@pika/pack": "^0.5.0",
+    "@pika/plugin-build-node": "^0.9.2",
+    "@pika/plugin-build-types": "^0.9.2",
+    "@pika/plugin-standard-pkg": "^0.9.2",
+    "@types/graphql": "^14.5.0",
+    "@types/jest": "^25.2.1",
+    "@types/node": "^13.11.0",
+    "@typescript-eslint/eslint-plugin": "^2.27.0",
+    "@typescript-eslint/parser": "^2.27.0",
+    "babel-core": "^6.26.3",
+    "babel-eslint": "^10.1.0",
+    "babel-jest": "^25.2.6",
+    "codecov": "^3.6.5",
+    "cross-env": "^7.0.2",
+    "eslint": "^6.8.0",
+    "eslint-plugin-import": "^2.20.2",
+    "eslint-plugin-jest": "^23.8.2",
+    "eslint-plugin-promise": "^4.2.1",
+    "fiddly": "^0.8.0",
+    "husky": "^4.2.3",
+    "jest": "^25.2.7",
+    "lint-staged": "^10.1.2",
+    "prettier": "^2.0.4",
+    "typescript": "^3.8.3"
+  },
+  "peerDependencies": {
+    "graphql": "^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0-rc.2"
+  },
+  "@pika/pack": {
+    "pipeline": [
+      [
+        "@pika/plugin-standard-pkg",
+        {
+          "exclude": [
+            "*.gql",
+            "__TEST__/*"
+          ]
+        }
+      ],
+      [
+        "@pika/plugin-build-node"
+      ],
+      [
+        "@pika/plugin-build-types"
+      ]
+    ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  }
+}
