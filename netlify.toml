@@ -1,0 +1,3 @@
+[build]
+  Command = "yarn build:docs"
+  Publish = "public"

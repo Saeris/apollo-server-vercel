@@ -15,10 +15,11 @@ export {
   // playground
   defaultPlaygroundOptions,
   PlaygroundConfig,
-  PlaygroundRenderPageOptions,
-} from 'apollo-server-core';
+  PlaygroundRenderPageOptions
+} from "apollo-server-core"
 
-export * from 'graphql-tools';
+export * from "graphql-tools"
 
 // ApolloServer integration.
-export { ApolloServer, CreateHandlerOptions } from './ApolloServer';
+export { ApolloServer } from "./ApolloServer"
+export type { CreateHandlerOptions } from "./ApolloServer"

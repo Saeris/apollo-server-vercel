@@ -3,9 +3,8 @@
     "module": "esnext",
     "target": "esnext",
     "jsx": "preserve",
-    "lib": ["esnext", "dom"],
+    "lib": ["esnext", "dom", "dom.iterable"],
     "strict": true,
-    "noEmit": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
     "noUnusedLocals": true,
@@ -15,5 +14,6 @@
     "moduleResolution": "node",
     "sourceMap": true
   },
-  "include": ["./src/**/*", "./lambda/**/*"]
+  "include": ["./src/**/*"],
+  "exclude": ["node_modules", "**/*.spec.ts"]
 }

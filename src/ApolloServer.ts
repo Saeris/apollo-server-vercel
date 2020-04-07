@@ -1,240 +1,163 @@
-import {
-  NowRequest, NowResponse
-} from '@now/node';
-import { ApolloServerBase, GraphQLOptions, Config } from 'apollo-server-core';
+import { ApolloServerBase, GraphQLOptions } from "apollo-server-core"
 import {
   renderPlaygroundPage,
-  RenderPageOptions as PlaygroundRenderPageOptions,
-} from '@apollographql/graphql-playground-html';
-
-import { graphqlLambda } from './lambdaApollo';
-import { Headers } from 'apollo-server-env';
+  RenderPageOptions as PlaygroundRenderPageOptions
+} from "@apollographql/graphql-playground-html"
+import { NowRequest, NowResponse } from "@now/node"
+import { graphqlNow } from "./nowApollo"
+import { setHeaders } from "./setHeaders"
 
 export interface CreateHandlerOptions {
   cors?: {
-    origin?: boolean | string | string[];
-    methods?: string | string[];
-    allowedHeaders?: string | string[];
-    exposedHeaders?: string | string[];
-    credentials?: boolean;
-    maxAge?: number;
-  };
-  onHealthCheck?: (req: APIGatewayProxyEvent) => Promise<any>;
+    origin?: boolean | string | string[]
+    methods?: string | string[]
+    allowedHeaders?: string | string[]
+    exposedHeaders?: string | string[]
+    credentials?: boolean
+    maxAge?: number
+  }
+  onHealthCheck?: (req: NowRequest) => Promise<any>
 }
 
 export class ApolloServer extends ApolloServerBase {
-  // If you feel tempted to add an option to this constructor. Please consider
-  // another place, since the documentation becomes much more complicated when
-  // the constructor is not longer shared between all integration
-  constructor(options: Config) {
-    if (process.env.ENGINE_API_KEY || options.engine) {
-      options.engine = {
-        sendReportsImmediately: true,
-        ...(typeof options.engine !== 'boolean' ? options.engine : {}),
-      };
-    }
-    super(options);
-  }
-
-  // This translates the arguments from the middleware into graphQL options It
-  // provides typings for the integration specific behavior, ideally this would
-  // be propagated with a generic to the super class
   createGraphQLServerOptions(
-    event: APIGatewayProxyEvent,
-    context: LambdaContext,
+    req: NowRequest,
+    res: NowResponse
   ): Promise<GraphQLOptions> {
-    return super.graphQLServerOptions({ event, context });
+    return super.graphQLServerOptions({ req, res })
   }
 
-  public createHandler({ cors, onHealthCheck }: CreateHandlerOptions = { cors: undefined, onHealthCheck: undefined }) {
-    // We will kick off the `willStart` event once for the server, and then
-    // await it before processing any requests by incorporating its `await` into
-    // the GraphQLServerOptions function which is called before each request.
-    const promiseWillStart = this.willStart();
-
-    const corsHeaders = new Headers();
+  public createHandler({ cors, onHealthCheck }: CreateHandlerOptions = {}) {
+    const corsHeaders = new Headers()
 
     if (cors) {
       if (cors.methods) {
-        if (typeof cors.methods === 'string') {
-          corsHeaders.set('access-control-allow-methods', cors.methods);
+        if (typeof cors.methods === `string`) {
+          corsHeaders.set(`access-control-allow-methods`, cors.methods)
         } else if (Array.isArray(cors.methods)) {
           corsHeaders.set(
-            'access-control-allow-methods',
-            cors.methods.join(','),
-          );
+            `access-control-allow-methods`,
+            cors.methods.join(`,`)
+          )
         }
       }
 
       if (cors.allowedHeaders) {
-        if (typeof cors.allowedHeaders === 'string') {
-          corsHeaders.set('access-control-allow-headers', cors.allowedHeaders);
+        if (typeof cors.allowedHeaders === `string`) {
+          corsHeaders.set(`access-control-allow-headers`, cors.allowedHeaders)
         } else if (Array.isArray(cors.allowedHeaders)) {
           corsHeaders.set(
-            'access-control-allow-headers',
-            cors.allowedHeaders.join(','),
-          );
+            `access-control-allow-headers`,
+            cors.allowedHeaders.join(`,`)
+          )
         }
       }
 
       if (cors.exposedHeaders) {
-        if (typeof cors.exposedHeaders === 'string') {
-          corsHeaders.set('access-control-expose-headers', cors.exposedHeaders);
+        if (typeof cors.exposedHeaders === `string`) {
+          corsHeaders.set(`access-control-expose-headers`, cors.exposedHeaders)
         } else if (Array.isArray(cors.exposedHeaders)) {
           corsHeaders.set(
-            'access-control-expose-headers',
-            cors.exposedHeaders.join(','),
-          );
+            `access-control-expose-headers`,
+            cors.exposedHeaders.join(`,`)
+          )
         }
       }
 
       if (cors.credentials) {
-        corsHeaders.set('access-control-allow-credentials', 'true');
+        corsHeaders.set(`access-control-allow-credentials`, `true`)
       }
-      if (typeof cors.maxAge === 'number') {
-        corsHeaders.set('access-control-max-age', cors.maxAge.toString());
+      if (typeof cors.maxAge === `number`) {
+        corsHeaders.set(`access-control-max-age`, cors.maxAge.toString())
       }
     }
 
-    return (
-      event: APIGatewayProxyEvent,
-      context: LambdaContext,
-      callback: APIGatewayProxyCallback,
-    ) => {
-      // We re-load the headers into a Fetch API-compatible `Headers`
-      // interface within `graphqlLambda`, but we still need to respect the
-      // case-insensitivity within this logic here, so we'll need to do it
-      // twice since it's not accessible to us otherwise, right now.
-      const eventHeaders = new Headers(event.headers);
-
-      // Make a request-specific copy of the CORS headers, based on the server
-      // global CORS headers we've set above.
-      const requestCorsHeaders = new Headers(corsHeaders);
+    return async (req: NowRequest, res: NowResponse) => {
+      const requestCorsHeaders = new Headers(corsHeaders)
 
       if (cors && cors.origin) {
-        const requestOrigin = eventHeaders.get('origin');
-        if (typeof cors.origin === 'string') {
-          requestCorsHeaders.set('access-control-allow-origin', cors.origin);
+        const requestOrigin = req.headers.origin
+        if (typeof cors.origin === `string`) {
+          requestCorsHeaders.set(`access-control-allow-origin`, cors.origin)
         } else if (
           requestOrigin &&
-          (typeof cors.origin === 'boolean' ||
+          (typeof cors.origin === `boolean` ||
             (Array.isArray(cors.origin) &&
               requestOrigin &&
-              cors.origin.includes(requestOrigin)))
+              cors.origin.includes(requestOrigin as string)))
         ) {
-          requestCorsHeaders.set('access-control-allow-origin', requestOrigin);
+          requestCorsHeaders.set(
+            `access-control-allow-origin`,
+            requestOrigin as string
+          )
         }
 
-        const requestAccessControlRequestHeaders = eventHeaders.get(
-          'access-control-request-headers',
-        );
+        const requestAccessControlRequestHeaders =
+          req.headers[`access-control-request-headers`]
         if (!cors.allowedHeaders && requestAccessControlRequestHeaders) {
           requestCorsHeaders.set(
-            'access-control-allow-headers',
-            requestAccessControlRequestHeaders,
-          );
+            `access-control-allow-headers`,
+            requestAccessControlRequestHeaders as string
+          )
         }
       }
 
-      // Convert the `Headers` into an object which can be spread into the
-      // various headers objects below.
-      // Note: while Object.fromEntries simplifies this code, it's only currently
-      //       supported in Node 12 (we support >=6)
-      const requestCorsHeadersObject = Array.from(requestCorsHeaders).reduce<
-        Record<string, string>
-      >((headersObject, [key, value]) => {
-        headersObject[key] = value;
-        return headersObject;
-      }, {});
+      const requestCorsHeadersObject = Object.fromEntries(
+        requestCorsHeaders.entries()
+      )
 
-      if (event.httpMethod === 'OPTIONS') {
-        context.callbackWaitsForEmptyEventLoop = false;
-        return callback(null, {
-          body: '',
-          statusCode: 204,
-          headers: {
-            ...requestCorsHeadersObject,
-          },
-        });
+      if (req.method === `OPTIONS`) {
+        setHeaders(res, requestCorsHeadersObject)
+        res.statusCode = 204
+        res.send(``)
       }
 
-      if (event.path === '/.well-known/apollo/server-health') {
-        const successfulResponse = {
-          body: JSON.stringify({ status: 'pass' }),
-          statusCode: 200,
-          headers: {
-            'Content-Type': 'application/json',
-            ...requestCorsHeadersObject,
-          },
-        };
+      if (req.url === `/.well-known/apollo/server-health`) {
+        const successfulResponse = () => {
+          setHeaders(res, {
+            "Content-Type": `application/json`,
+            ...requestCorsHeadersObject
+          })
+          res.statusCode = 200
+          res.send({ status: `pass` })
+        }
         if (onHealthCheck) {
-          onHealthCheck(event)
-            .then(() => {
-              return callback(null, successfulResponse);
+          try {
+            await onHealthCheck(req)
+            successfulResponse()
+          } catch {
+            setHeaders(res, {
+              "Content-Type": `application/json`,
+              ...requestCorsHeadersObject
             })
-            .catch(() => {
-              return callback(null, {
-                body: JSON.stringify({ status: 'fail' }),
-                statusCode: 503,
-                headers: {
-                  'Content-Type': 'application/json',
-                  ...requestCorsHeadersObject,
-                },
-              });
-            });
-          } else {
-            return callback(null, successfulResponse);
+            res.statusCode = 503
+            res.send({ status: `fail` })
           }
+        } else {
+          successfulResponse()
+        }
       }
 
-      if (this.playgroundOptions && event.httpMethod === 'GET') {
-        const acceptHeader = event.headers['Accept'] || event.headers['accept'];
-        if (acceptHeader && acceptHeader.includes('text/html')) {
-          const path =
-            event.path ||
-            (event.requestContext && event.requestContext.path) ||
-            '/';
+      if (this.playgroundOptions && req.method === `GET`) {
+        const acceptHeader = req.headers.Accept || req.headers.accept
+        if (acceptHeader && acceptHeader.includes(`text/html`)) {
+          const path = req.url || `/`
 
           const playgroundRenderPageOptions: PlaygroundRenderPageOptions = {
             endpoint: path,
-            ...this.playgroundOptions,
-          };
+            ...this.playgroundOptions
+          }
 
-          return callback(null, {
-            body: renderPlaygroundPage(playgroundRenderPageOptions),
-            statusCode: 200,
-            headers: {
-              'Content-Type': 'text/html',
-              ...requestCorsHeadersObject,
-            },
-          });
+          setHeaders(res, {
+            "Content-Type": `text/html`,
+            ...requestCorsHeadersObject
+          })
+          res.statusCode = 200
+          res.send(renderPlaygroundPage(playgroundRenderPageOptions))
         }
       }
 
-      const callbackFilter: APIGatewayProxyCallback = (error, result) => {
-        callback(
-          error,
-          result && {
-            ...result,
-            headers: {
-              ...result.headers,
-              ...requestCorsHeadersObject,
-            },
-          },
-        );
-      };
-
-      graphqlLambda(async () => {
-        // In a world where this `createHandler` was async, we might avoid this
-        // but since we don't want to introduce a breaking change to this API
-        // (by switching it to `async`), we'll leverage the
-        // `GraphQLServerOptions`, which are dynamically built on each request,
-        // to `await` the `promiseWillStart` which we kicked off at the top of
-        // this method to ensure that it runs to completion (which is part of
-        // its contract) prior to processing the request.
-        await promiseWillStart;
-        return this.createGraphQLServerOptions(event, context);
-      })(event, context, callbackFilter);
-    };
+      graphqlNow(() => this.createGraphQLServerOptions(req, res))
+    }
   }
 }

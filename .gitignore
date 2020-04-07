@@ -1,28 +1,28 @@
-# Ignore the compiled output.
-dist/
+# package directories
+node_modules
+jspm_packages
 
-# TypeScript incremental compilation cache
-*.tsbuildinfo
+# Directories
+.serverless
+.webpack
+.netlify
+/.coverage
+/pkg
+/dist
+/public
+/build
+/typings
+/.awcache
+/.ssh
+/electron.js*
 
-# Logs
-logs
-*.log
+# Files
+.DS_STORE
 npm-debug.log*
-yarn-debug.log*
 yarn-error.log*
+.env
+serverless.env.yml
+.nyc_output
 
-# Coverage (from Jest)
-coverage/
-
-# JUnit Reports (used mainly in CircleCI)
-reports/
-junit.xml
-
-# Node modules
-node_modules/
-
-# Mac OS
-.DS_Store
-
-# Intellij Configuration Files
-.idea/
+coverage.lcov
+engine.json
