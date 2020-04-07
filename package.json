@@ -19,6 +19,9 @@
   "bugs": {
     "url": "https://github.com/saeris/apollo-server-now/issues"
   },
+  "publishConfig": {
+    "access": "public"
+  },
   "main": "src/index.js",
   "scripts": {
     "build": "pika build",
