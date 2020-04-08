@@ -1,6 +1,6 @@
 <h1 align="center" style="display: block; text-align: center;">⚫ Apollo Server Now</h1>
 <p align="center"><a href="https://www.npmjs.org/package/@saeris/apollo-server-now"><img src="https://img.shields.io/npm/v/@saeris/apollo-server-now.svg?style=flat" alt="npm"></a><a href="https://travis-ci.com/Saeris/apollo-server-now"><img src="https://travis-ci.com/Saeris/apollo-server-now.svg?branch=master" alt="travis"></a><a href="https://codecov.io/gh/Saeris/apollo-server-now"><img src="https://codecov.io/gh/Saeris/apollo-server-now/branch/master/graph/badge.svg" alt="codecov"/></a></p>
-<p align="center">Production-ready Node.js GraphQL server for [Zeit Now](https://zeit.co/home) Serverless Functions</a>.</p>
+<p align="center">Production-ready Node.js GraphQL server for <a href="https://zeit.co/home">Zeit Now</a> Serverless Functions</a>.</p>
 
 ---
 
