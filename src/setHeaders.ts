@@ -1,4 +1,4 @@
-import { NowResponse } from "@now/node"
+import { NowResponse } from "@vercel/node"
 
 export const setHeaders = (
   res: NowResponse,

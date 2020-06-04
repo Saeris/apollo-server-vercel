@@ -5,7 +5,7 @@ import {
   convertNodeHttpToRequest
 } from "apollo-server-core"
 import { ValueOrPromise } from "apollo-server-types"
-import { NowRequest, NowResponse } from "@now/node"
+import { NowRequest, NowResponse } from "@vercel/node"
 import { setHeaders } from "./setHeaders"
 
 type NowApiHandler = (req: NowRequest, res: NowResponse) => void
@@ -14,7 +14,7 @@ export interface NowGraphQLOptionsFunction {
   (req?: NowRequest): ValueOrPromise<GraphQLOptions>
 }
 
-export function graphqlNow(
+export function graphqlVercel(
   options: GraphQLOptions | NowGraphQLOptionsFunction
 ): NowApiHandler {
   if (!options) throw new Error(`Apollo Server requires options.`)

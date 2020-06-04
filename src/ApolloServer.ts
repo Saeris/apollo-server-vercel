@@ -3,8 +3,8 @@ import {
   renderPlaygroundPage,
   RenderPageOptions as PlaygroundRenderPageOptions
 } from "@apollographql/graphql-playground-html"
-import { NowRequest, NowResponse } from "@now/node"
-import { graphqlNow } from "./nowApollo"
+import { NowRequest, NowResponse } from "@vercel/node"
+import { graphqlVercel } from "./vercelApollo"
 import { setHeaders } from "./setHeaders"
 
 export interface CreateHandlerOptions {
@@ -157,7 +157,7 @@ export class ApolloServer extends ApolloServerBase {
         }
       }
 
-      graphqlNow(() => this.createGraphQLServerOptions(req, res))
+      graphqlVercel(() => this.createGraphQLServerOptions(req, res))
     }
   }
 }

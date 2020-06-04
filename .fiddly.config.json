@@ -1,9 +1,9 @@
 {
-	"name": "⚫ Apollo Server Now",
-	"description": "Production-ready Node.js GraphQL server for Zeit Now Serverless Functions",
+	"name": "⚫ Apollo Server Vercel",
+	"description": "Production-ready Node.js GraphQL server for Vercel Serverless Functions",
 	"noHeader": true,
 	"homepage:": "http://saeris.io",
-	"repo": "https://github.com/saeris/apollo-server-now",
+	"repo": "https://github.com/saeris/apollo-server-vercel",
 	"favicon": "static/favicon.ico",
 	"styles": "styles/styles.css"
 }
