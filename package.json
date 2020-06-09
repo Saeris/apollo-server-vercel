@@ -38,10 +38,10 @@
     "@apollographql/graphql-playground-html": "1.6.24",
     "@vercel/node": "^1.6.1",
     "accept": "^3.1.3",
-    "apollo-server-core": "^2.14.2",
+    "apollo-server-core": "^2.14.3",
     "apollo-server-env": "^2.4.4",
     "apollo-server-types": "^0.5.0",
-    "graphql-tools": "^6.0.7"
+    "graphql-tools": "^6.0.9"
   },
   "devDependencies": {
     "@babel/core": "^7.10.2",
@@ -57,16 +57,16 @@
     "@types/accept": "^3.1.1",
     "@types/graphql": "^14.5.0",
     "@types/jest": "^25.2.3",
-    "@types/node": "^14.0.10",
-    "@typescript-eslint/eslint-plugin": "^3.1.0",
-    "@typescript-eslint/parser": "^3.1.0",
+    "@types/node": "^14.0.12",
+    "@typescript-eslint/eslint-plugin": "^3.2.0",
+    "@typescript-eslint/parser": "^3.2.0",
     "babel-core": "^6.26.3",
     "babel-eslint": "^10.1.0",
     "babel-jest": "^26.0.1",
     "codecov": "^3.7.0",
     "cross-env": "^7.0.2",
-    "eslint": "^7.1.0",
-    "eslint-plugin-import": "^2.20.2",
+    "eslint": "^7.2.0",
+    "eslint-plugin-import": "^2.21.1",
     "eslint-plugin-jest": "^23.13.2",
     "eslint-plugin-promise": "^4.2.1",
     "fiddly": "^0.9.1",
@@ -74,7 +74,7 @@
     "jest": "^26.0.1",
     "lint-staged": "^10.2.9",
     "prettier": "2.0.5",
-    "typescript": "^3.9.3"
+    "typescript": "^3.9.5"
   },
   "peerDependencies": {
     "graphql": "^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0-rc.2"
