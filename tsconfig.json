@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "module": "esnext",
-    "target": "esnext",
+    "target": "ES2018",
     "jsx": "preserve",
     "lib": ["esnext", "dom", "dom.iterable"],
     "strict": true,
