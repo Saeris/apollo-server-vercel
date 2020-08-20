@@ -51,7 +51,7 @@ export default server.createHandler();
 
 ## 🕹️ Demo
 
-The example under `api/example.ts` is live at https://apollo-server-now.saeris.io/api/example. You can also give it a try [via CodeSandbox](https://codesandbox.io/s/apollo-server-vercel-demo-oumls?file=/pages/api/demo.ts) or locally by cloning this repo, running `yarn && yarn start`, and then navigate to the URL provided in your terminal (usually http://localhost:3000/api/example).
+The example under `api/example.ts` is live at https://apollo-server-vercel.saeris.io/api/example. You can also give it a try [via CodeSandbox](https://codesandbox.io/s/apollo-server-vercel-demo-oumls?file=/pages/api/demo.ts) or locally by cloning this repo, running `yarn && yarn start`, and then navigate to the URL provided in your terminal (usually http://localhost:3000/api/example).
 
 ## 🧪 Testing
 
