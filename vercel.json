@@ -4,8 +4,7 @@
 	"scope": "saeris",
   "functions": {
     "api/example.ts": {
-      "maxDuration": 5,
-			"includeFiles": "./pkg"
+      "maxDuration": 5
     }
   }
 }

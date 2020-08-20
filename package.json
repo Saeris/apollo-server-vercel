@@ -28,8 +28,7 @@
   },
   "scripts": {
     "start": "vercel dev",
-    "build": "yarn build:lib && yarn build:docs",
-    "build:lib": "pika build",
+    "build": "pika build",
     "build:docs": "fiddly",
     "typecheck": "tsc --noEmit",
     "lint": "eslint ./src/**/*.{js,ts}",

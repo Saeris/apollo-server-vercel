@@ -1,4 +1,4 @@
-import { ApolloServer } from "../pkg";
+import { ApolloServer } from "../src";
 
 // Construct a schema, using GraphQL schema language
 const typeDefs = `
