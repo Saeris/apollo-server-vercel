@@ -26,3 +26,5 @@ serverless.env.yml
 
 coverage.lcov
 engine.json
+
+.vercel

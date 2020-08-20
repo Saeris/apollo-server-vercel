@@ -29,7 +29,7 @@ export function graphqlVercel(options: GraphQLOptions | NowGraphQLOptionsFunctio
         request: convertNodeHttpToRequest(req)
       });
       setHeaders(res, responseInit.headers ?? {});
-      return res.status(200).json(graphqlResponse);
+      return res.status(200).send(graphqlResponse);
     } catch (error) {
       const { headers, statusCode, message }: HttpQueryError = error;
       setHeaders(res, headers ?? {});

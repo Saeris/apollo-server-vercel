@@ -12,6 +12,7 @@ import {
   RenderPageOptions as PlaygroundRenderPageOptions
 } from "@apollographql/graphql-playground-html";
 import { NowRequest, NowResponse } from "@vercel/node";
+import { Headers } from 'node-fetch';
 import { graphqlVercel } from "./vercelApollo";
 import { setHeaders } from "./setHeaders";
 
@@ -174,7 +175,7 @@ export class ApolloServer extends ApolloServerBase {
         }
       };
 
-      fileUploadHandler(() =>
+      return fileUploadHandler(() =>
         graphqlVercel(async () => {
           await promiseWillStart;
           return this.createGraphQLServerOptions(req, res);

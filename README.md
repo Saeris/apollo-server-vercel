@@ -9,9 +9,9 @@
 ## 📦 Installation
 
 ```bash
-npm install --save @saeris/apollo-server-vercel
+npm install --save @saeris/apollo-server-vercel graphql
 # or
-yarn add @saeris/apollo-server-vercel
+yarn add @saeris/apollo-server-vercel graphql
 ```
 
 ## 🔧 Usage
@@ -49,9 +49,33 @@ const server = new ApolloServer({
 export default server.createHandler();
 ```
 
-## 🏖️ Example
+## 🕹️ Demo
 
-Give it a try [via CodeSandbox](https://codesandbox.io/s/apollo-server-vercel-demo-oumls?file=/pages/api/demo.ts)!
+You can give it a try [via CodeSandbox](https://codesandbox.io/s/apollo-server-vercel-demo-oumls?file=/pages/api/demo.ts) or locally by cloning this repo, running `yarn && yarn start`, and then navigate to the URL provided in your terminal (usually http://localhost:3000/api/example).
+
+## 🧪 Testing
+
+Testing is provided via `jest` and is pre-configured to run with `codecov` as well. Tests for this project have been adapted from the official Apollo Server integration tests and they can be found under `src/__test__`. Additionally, this project uses `eslint`, `typescript`, and `prettier`, all three of which are automatically run on each commit via `husky` + `lint-staged`. To manually lint and test, use the following commands:
+
+Lint:
+```bash
+yarn lint
+```
+
+Typecheck:
+```bash
+yarn typecheck
+```
+
+Test and watch for changes:
+```bash
+yarn test:watch
+```
+
+Lint + Typecheck + Test:
+```bash
+yarn test
+```
 
 ## 🥂 License
 

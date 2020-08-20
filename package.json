@@ -23,8 +23,13 @@
     "access": "public"
   },
   "main": "src/index.js",
+  "engines": {
+    "node": ">=10.x"
+  },
   "scripts": {
-    "build": "pika build",
+    "start": "vercel dev",
+    "build": "yarn build:lib && yarn build:docs",
+    "build:lib": "pika build",
     "build:docs": "fiddly",
     "typecheck": "tsc --noEmit",
     "lint": "eslint ./src/**/*.{js,ts}",
@@ -83,9 +88,11 @@
     "js-sha256": "^0.9.0",
     "lint-staged": "^10.2.11",
     "micro": "^9.3.4",
+    "node-fetch": "^2.6.0",
     "prettier": "2.0.5",
     "supertest": "^4.0.2",
     "typescript": "^3.9.7",
+    "vercel": "^19.2.0",
     "vercel-node-server": "^2.2.1"
   },
   "peerDependencies": {
@@ -98,7 +105,8 @@
         {
           "exclude": [
             "*.gql",
-            "__TEST__/*"
+            "__mocks__/**/*",
+            "__test__/**/*"
           ]
         }
       ],
