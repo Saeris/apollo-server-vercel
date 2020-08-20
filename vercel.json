@@ -4,7 +4,8 @@
 	"scope": "saeris",
   "functions": {
     "api/example.ts": {
-      "maxDuration": 5
+      "maxDuration": 1,
+			"memory": 128
     }
   }
 }
