@@ -17,10 +17,10 @@ yarn add @saeris/apollo-server-vercel
 ## 🔧 Usage
 
 ```typescript
-import { ApolloServer, gql } from "@saeris/apollo-server-vercel";
+import { ApolloServer } from "@saeris/apollo-server-vercel";
 
 // Construct a schema, using GraphQL schema language
-const typeDefs = gql`
+const typeDefs = `
   type Query {
     hello: String
   }
@@ -48,6 +48,10 @@ const server = new ApolloServer({
 
 export default server.createHandler();
 ```
+
+## 🏖️ Example
+
+Give it a try [via CodeSandbox](https://codesandbox.io/s/apollo-server-vercel-demo-oumls?file=/pages/api/demo.ts)!
 
 ## 🥂 License
 
