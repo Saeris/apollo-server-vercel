@@ -16,7 +16,7 @@ npm install --save @saeris/apollo-server-vercel graphql
 yarn add @saeris/apollo-server-vercel graphql
 ```
 
-Only clone this repository if you intend to contribute to the development of this library! Please read the Contributing section below for more details.
+Only clone this repository if you intend to contribute to the development of this library! Please read the [Contributing](#%EF%B8%8F-contributing) section below for more details.
 
 ## 🔧 Usage
 
@@ -70,7 +70,9 @@ The example under `api/example.ts` is live at https://apollo-server-vercel.saeri
 
 ## 🏗️ Contributing
 
-If you would like to contribute to the development of this library, feel free to open a pull request! Getting started should be as easy as running `git clone https://github.com/Saeris/apollo-server-vercel.git` and then `npm install` or `yarn` to install dependencies. Please make sure you run `yarn test` after making any changes to ensure that all of the integration tests pass before submitting your PR. At this time only bug fixes will be accepted!
+If you would like to contribute to the development of this library, feel free to open a pull request! Getting started should be as easy as running `git clone https://github.com/Saeris/apollo-server-vercel.git` and then `npm install` or `yarn` to install dependencies. Please make sure you run `yarn test` after making any changes to ensure that all of the integration tests pass before submitting your PR.
+
+⚠️ At this time only bug fixes will be accepted!
 
 ## 🧪 Testing
 
