@@ -8,15 +8,25 @@
 
 ## 📦 Installation
 
+In an existing application deployable to Vercel (such as [create-next-app](https://nextjs.org/blog/create-next-app)), add the following to your project's dependencies:
+
 ```bash
 npm install --save @saeris/apollo-server-vercel graphql
 # or
 yarn add @saeris/apollo-server-vercel graphql
 ```
 
+Only clone this repository if you intend to contribute to the development of this library! Please read the Contributing section below for more details.
+
 ## 🔧 Usage
 
+Please read Vercel's documentation on [how to deploy a serverless function](https://vercel.com/docs/serverless-functions/introduction) or if you are using Nextjs, follow their [guide on adding API routes](https://nextjs.org/docs/api-routes/introduction). Also note that this library is intended only for use with Vercel's hosting platform. If you intend to deploy a Nextjs app to a different platform, such as Netlify, you will need to use [Apollo Server Lambda](https://www.apollographql.com/docs/apollo-server/deployment/netlify/) instead. The API of this library is identical to `apollo-server-lambda` and as such, switching between the two is as simple as swapping out dependencies and placing your endpoint handler in the appropriate directory.
+
 ```typescript
+// Create a new API endpoint handler in the appropriate directory for your project:
+// Vercel: ./api/<endpoint-name>.{js|ts}
+// Nextjs: ./pages/api/<endpoint-name>.{js|ts} or ./src/pages/api/<endpoint-name>.{js|ts}
+
 import { ApolloServer } from "@saeris/apollo-server-vercel";
 
 // Construct a schema, using GraphQL schema language
@@ -47,15 +57,24 @@ const server = new ApolloServer({
 });
 
 export default server.createHandler();
+
+// You should now be able to access your new endpoint from via::
+// http://localhost:3000/api/<endpoint-name>
 ```
 
 ## 🕹️ Demo
 
 The example under `api/example.ts` is live at https://apollo-server-vercel.saeris.io/api/example. You can also give it a try [via CodeSandbox](https://codesandbox.io/s/apollo-server-vercel-demo-oumls?file=/pages/api/demo.ts) or locally by cloning this repo, running `yarn && yarn start`, and then navigate to the URL provided in your terminal (usually http://localhost:3000/api/example).
 
+---
+
+## 🏗️ Contributing
+
+If you would like to contribute to the development of this library, feel free to open a pull request! Getting started should be as easy as running `git clone https://github.com/Saeris/apollo-server-vercel.git` and then `npm install` or `yarn` to install dependencies. Please make sure you run `yarn test` after making any changes to ensure that all of the integration tests pass before submitting your PR. At this time only bug fixes will be accepted!
+
 ## 🧪 Testing
 
-Testing is provided via `jest` and is pre-configured to run with `codecov` as well. Tests for this project have been adapted from the official Apollo Server integration tests and they can be found under `src/__test__`. Additionally, this project uses `eslint`, `typescript`, and `prettier`, all three of which are automatically run on each commit via `husky` + `lint-staged`. To manually lint and test, use the following commands:
+Testing is provided via `jest` and is pre-configured to run with `codecov` as well. Tests for this library have been adapted from the official Apollo Server integration tests and they can be found under `src/__test__`. Additionally, this library uses `eslint`, `typescript`, and `prettier`, all three of which are automatically run on each commit via `husky` + `lint-staged`. To manually lint and test, use the following commands:
 
 Lint:
 ```bash
@@ -76,6 +95,10 @@ Lint + Typecheck + Test:
 ```bash
 yarn test
 ```
+
+## 📣 Acknowledgements
+
+This library is based on [apollo-server-lambda](https://github.com/apollographql/apollo-server/tree/main/packages/apollo-server-lambda) and uses integration tests copied from that library as well as [apollo-server-integration-testsuite](https://github.com/apollographql/apollo-server/tree/main/packages/apollo-server-integration-testsuite). Huge thanks to all the folks at Apollo for their amazing work!
 
 ## 🥂 License
 
