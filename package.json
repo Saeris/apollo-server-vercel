@@ -31,7 +31,7 @@
     "build": "pika build",
     "build:docs": "fiddly",
     "typecheck": "tsc --noEmit",
-    "lint": "eslint ./src/**/*.{js,ts}",
+    "lint": "eslint \"./src/**/*.{j,t}s?(x)\"",
     "test": "yarn lint && yarn typecheck && jest -c ./jest.config.js",
     "test:watch": "jest -c ./jest.config.js --watch",
     "test:coverage": "jest -c ./jest.config.js && codecov",
