@@ -178,6 +178,11 @@ export class ApolloServer extends ApolloServerBase {
       return fileUploadHandler(() =>
         graphqlVercel(async () => {
           await promiseWillStart;
+          if (cors) {
+            setHeaders(res, {
+              ...requestCorsHeadersObject
+            });
+          }
           return this.createGraphQLServerOptions(req, res);
         })(req, res)
       );

@@ -21,6 +21,26 @@ const createApp = (options: CreateAppOptions | Config = { schema: Schema }) => {
   });
 };
 
+const createCORSApp = (options: CreateAppOptions | Config = { schema: Schema }) => {
+  const server = new ApolloServer(options as Config);
+  const handler = server.createHandler({
+    cors: {
+      origin: `*`,
+      credentials: true,
+      methods: `GET,POST`,
+      allowedHeaders: `origin,content-type`
+    }
+  });
+  return createServer((req, res) => {
+    // Vercel has Filesystem base routing, so it handles 404's for us
+    if (req?.url.includes(`/bogus-route`)) {
+      send(res, 404);
+    } else {
+      handler(req, res);
+    }
+  });
+};
+
 describe(`integration:Vercel`, () => {
   testSuite(createApp);
 });
@@ -169,4 +189,32 @@ const resolvers = {
       expect(res.body.data.multiUpload).toEqual(expected);
     });
   });
+});
+
+describe(`cors`, () => {
+  let app = <any>null;
+
+  beforeEach(() => {
+    app = createCORSApp({
+      typeDefs,
+      resolvers
+    });
+  });
+
+  it(`should add expected cors headers to response`, async () => {
+    const req = request(app)
+      .post(`/graphql`)
+      .set(`Content-Type`, `application/json`)
+      .set(`Accept`, `application/json`)
+      .send({
+        query: `query{helloWorld}`
+      });
+    const res = await req;
+    expect(res.statusCode).toBe(200);
+    expect(res.body.data.helloWorld).toBe(`hi`);
+    expect(res.header[`access-control-allow-origin`]).toEqual(`*`);
+    expect(res.header[`access-control-allow-credentials`]).toEqual(`true`);
+    expect(res.header[`access-control-allow-headers`]).toEqual(`origin,content-type`);
+    expect(res.header[`access-control-allow-methods`]).toEqual(`GET,POST`);
+  })
 });
