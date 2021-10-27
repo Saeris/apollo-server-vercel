@@ -1,5 +1,5 @@
 <h1 align="center" style="display: block; text-align: center;">⚫ Apollo Server Vercel</h1>
-<p align="center"><a href="https://www.npmjs.org/package/@saeris/apollo-server-vercel"><img src="https://img.shields.io/npm/v/@saeris/apollo-server-vercel.svg?style=flat" alt="npm"></a><a href="https://travis-ci.com/Saeris/apollo-server-vercel"><img src="https://travis-ci.com/Saeris/apollo-server-vercel.svg?branch=master" alt="travis"></a><a href="https://codecov.io/gh/Saeris/apollo-server-vercel"><img src="https://codecov.io/gh/Saeris/apollo-server-vercel/branch/master/graph/badge.svg" alt="codecov"/></a></p>
+<p align="center"><a href="https://www.npmjs.org/package/@saeris/apollo-server-vercel"><img src="https://img.shields.io/npm/v/@saeris/apollo-server-vercel.svg?style=flat" alt="npm"></a><a href="https://codecov.io/gh/Saeris/apollo-server-vercel"><img src="https://codecov.io/gh/Saeris/apollo-server-vercel/branch/master/graph/badge.svg" alt="codecov"/></a></p>
 <p align="center">Production-ready Node.js GraphQL server for <a href="https://vercel.com/">Vercel</a> Serverless Functions</a>.</p>
 
 ---
@@ -39,8 +39,8 @@ const typeDefs = `
 // Provide resolver functions for your schema fields
 const resolvers = {
   Query: {
-    hello: () => 'Hello world!',
-  },
+    hello: () => "Hello world!"
+  }
 };
 
 const server = new ApolloServer({
@@ -53,7 +53,7 @@ const server = new ApolloServer({
   // If you'd like to have GraphQL Playground and introspection enabled in production,
   // the `playground` and `introspection` options must be set explicitly to `true`.
   playground: true,
-  introspection: true,
+  introspection: true
 });
 
 export default server.createHandler();
@@ -77,21 +77,25 @@ If you would like to contribute to the development of this library, feel free to
 Testing is provided via `jest` and is pre-configured to run with `codecov` as well. Tests for this library have been adapted from the official Apollo Server integration tests and they can be found under `src/__test__`. Additionally, this library uses `eslint`, `typescript`, and `prettier`, all three of which are automatically run on each commit via `husky` + `lint-staged`. To manually lint and test, use the following commands:
 
 Lint:
+
 ```bash
 yarn lint
 ```
 
 Typecheck:
+
 ```bash
 yarn typecheck
 ```
 
 Test and watch for changes:
+
 ```bash
 yarn test:watch
 ```
 
 Lint + Typecheck + Test:
+
 ```bash
 yarn test
 ```

@@ -1,5 +1,12 @@
+// @ts-check
+const { name } = require(`./package.json`);
+
+/**
+ * @type {import("@jest/types").Config.InitialOptions}
+ */
 module.exports = {
-  displayName: `graphql-scalars`,
+  displayName: name,
+  testRunner: `jest-circus/runner`,
   coverageDirectory: `./.coverage/`,
   collectCoverage: true,
   collectCoverageFrom: [
@@ -12,8 +19,5 @@ module.exports = {
     `!**/vendor/**`
   ],
   testEnvironment: `node`,
-  transform: {
-    "^.+\\.(js|ts)x?$": `babel-jest`
-  },
   verbose: true
-}
+};
