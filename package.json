@@ -24,7 +24,7 @@
   },
   "main": "src/index.js",
   "engines": {
-    "node": ">=10.x"
+    "node": ">=12.x"
   },
   "scripts": {
     "ci": "yarn install --ignore-scripts --frozen-lockfile --silent --non-interactive",
@@ -34,7 +34,6 @@
     "release": "pika publish",
     "start": "vercel dev",
     "test": "yarn test:lint && yarn test:typecheck && yarn test:unit",
-    "test:coverage": "yarn test:unit && codecov",
     "test:lint": "eslint \"./src/**/*.{j,t}s?(x)\"",
     "test:typecheck": "tsc --noEmit",
     "test:unit": "jest",
@@ -76,7 +75,6 @@
     "apollo-server-plugin-response-cache": "^0.5.3",
     "babel-core": "^6.26.3",
     "babel-eslint": "^10.1.0",
-    "codecov": "^3.7.2",
     "cross-env": "^7.0.2",
     "eslint": "^7.6.0",
     "eslint-plugin-import": "^2.22.0",
