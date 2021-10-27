@@ -34,7 +34,6 @@
     "release": "pika publish",
     "start": "vercel dev",
     "test": "yarn test:lint && yarn test:typecheck && yarn test:unit",
-    "test:coverage": "yarn test:unit && codecov",
     "test:lint": "eslint \"./src/**/*.{j,t}s?(x)\"",
     "test:typecheck": "tsc --noEmit",
     "test:unit": "jest",
