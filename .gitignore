@@ -6,7 +6,7 @@ jspm_packages
 .serverless
 .webpack
 .netlify
-/.coverage
+/coverage
 /pkg
 /dist
 /public
