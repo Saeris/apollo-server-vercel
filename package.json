@@ -81,7 +81,7 @@
     "eslint-plugin-jest": "^23.20.0",
     "eslint-plugin-promise": "^4.2.1",
     "express": "^4.17.1",
-    "fiddly": "^0.9.1",
+    "fiddly": "^0.12.0",
     "graphql-subscriptions": "^1.1.0",
     "husky": "^4.2.5",
     "jest": "^27.3.1",
@@ -92,7 +92,7 @@
     "prettier": "2.0.5",
     "supertest": "^4.0.2",
     "typescript": "^3.9.7",
-    "vercel": "^19.2.0",
+    "vercel": "^23.1.2",
     "vercel-node-server": "^2.2.1"
   },
   "peerDependencies": {
