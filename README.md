@@ -72,8 +72,6 @@ The example under `api/example.ts` is live at https://apollo-server-vercel.saeri
 
 If you would like to contribute to the development of this library, feel free to open a pull request! Getting started should be as easy as running `git clone https://github.com/Saeris/apollo-server-vercel.git` and then `npm install` or `yarn` to install dependencies. Please make sure you run `yarn test` after making any changes to ensure that all of the integration tests pass before submitting your PR.
 
-⚠️ At this time only bug fixes will be accepted!
-
 ## 🧪 Testing
 
 Testing is provided via `jest` and is pre-configured to run with `codecov` as well. Tests for this library have been adapted from the official Apollo Server integration tests and they can be found under `src/__test__`. Additionally, this library uses `eslint`, `typescript`, and `prettier`, all three of which are automatically run on each commit via `husky` + `lint-staged`. To manually lint and test, use the following commands:
@@ -97,6 +95,12 @@ Lint + Typecheck + Test:
 ```bash
 yarn test
 ```
+
+## ⚠️ Support Notice
+
+This code is released as-is, with no guarantee of support or maintenance over time. It was developed to meet my own personal needs and will only receive updates as and when I have a need for them. For that reason, if you come to rely on this package in your own codebase, I highly recommend that you create a fork rather than to submit a pull request, as I can make no promises about reviewing or merging PRs in a timely manner. Though I do very much appreciate feedback, PRs, and bug reports.
+
+When updates are published, significant changes to the public API (including Typescript types) or major versions of peer dependencies will be considered breaking changes and as such will be published under a new major version. Features will be released under a new minor version, and miscellaneous changes or bug fixes will be published as patches.
 
 ## 📣 Acknowledgements
 
