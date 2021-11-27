@@ -1,20 +1,10 @@
-import { IncomingHttpHeaders } from "http";
-import { Readable } from "stream";
-import {
-  ApolloServerBase,
-  GraphQLOptions,
-  formatApolloErrors,
-  processFileUploads,
-  FileUploadOptions
-} from "apollo-server-core";
-import {
-  renderPlaygroundPage,
-  RenderPageOptions as PlaygroundRenderPageOptions
-} from "@apollographql/graphql-playground-html";
-import { NowRequest, NowResponse } from "@vercel/node";
-import { Headers } from 'node-fetch';
-import { graphqlVercel } from "./vercelApollo";
+import { ApolloServerBase, formatApolloErrors, processFileUploads } from "apollo-server-core";
+import type { GraphQLOptions, FileUploadOptions } from "apollo-server-core";
+import { renderPlaygroundPage } from "@apollographql/graphql-playground-html";
+import type { RenderPageOptions as PlaygroundRenderPageOptions } from "@apollographql/graphql-playground-html";
+import type { VercelApiHandler, VercelRequest, VercelResponse } from "@vercel/node";
 import { setHeaders } from "./setHeaders";
+import { graphqlVercel } from "./vercelApollo";
 
 export interface CreateHandlerOptions {
   cors?: {
@@ -26,15 +16,11 @@ export interface CreateHandlerOptions {
     maxAge?: number;
   };
   uploadsConfig?: FileUploadOptions;
-  onHealthCheck?: (req: NowRequest) => Promise<any>;
-}
-
-export class FileUploadRequest extends Readable {
-  headers!: IncomingHttpHeaders;
+  onHealthCheck?: (req: VercelRequest) => Promise<void>;
 }
 
 export class ApolloServer extends ApolloServerBase {
-  createGraphQLServerOptions(req: NowRequest, res: NowResponse): Promise<GraphQLOptions> {
+  async createGraphQLServerOptions(req: VercelRequest, res: VercelResponse): Promise<GraphQLOptions> {
     return super.graphQLServerOptions({ req, res });
   }
 
@@ -42,9 +28,8 @@ export class ApolloServer extends ApolloServerBase {
     return true;
   }
 
-  public createHandler({ cors, onHealthCheck }: CreateHandlerOptions = {}) {
-    const promiseWillStart = this.willStart();
-    const corsHeaders = new Headers();
+  public createHandler({ cors, onHealthCheck }: CreateHandlerOptions = {}): VercelApiHandler {
+    const corsHeaders = new Map();
 
     if (cors) {
       if (cors.methods) {
@@ -79,24 +64,25 @@ export class ApolloServer extends ApolloServerBase {
       }
     }
 
-    return async (req: NowRequest, res: NowResponse) => {
-      const requestCorsHeaders = new Headers(corsHeaders);
+    return async (req: VercelRequest, res: VercelResponse): Promise<void> => {
+      const willStart = this.willStart();
+      const requestCorsHeaders = new Map(corsHeaders);
 
-      if (cors && cors.origin) {
+      if (cors?.origin) {
         const requestOrigin = req.headers.origin;
         if (typeof cors.origin === `string`) {
           requestCorsHeaders.set(`access-control-allow-origin`, cors.origin);
         } else if (
           requestOrigin &&
           (typeof cors.origin === `boolean` ||
-            (Array.isArray(cors.origin) && requestOrigin && cors.origin.includes(requestOrigin as string)))
+            (Array.isArray(cors.origin) && requestOrigin && cors.origin.includes(requestOrigin)))
         ) {
-          requestCorsHeaders.set(`access-control-allow-origin`, requestOrigin as string);
+          requestCorsHeaders.set(`access-control-allow-origin`, requestOrigin);
         }
 
         const requestAccessControlRequestHeaders = req.headers[`access-control-request-headers`];
         if (!cors.allowedHeaders && requestAccessControlRequestHeaders) {
-          requestCorsHeaders.set(`access-control-allow-headers`, requestAccessControlRequestHeaders as string);
+          requestCorsHeaders.set(`access-control-allow-headers`, requestAccessControlRequestHeaders);
         }
       }
 
@@ -110,11 +96,12 @@ export class ApolloServer extends ApolloServerBase {
 
       if (req.method === `OPTIONS`) {
         setHeaders(res, requestCorsHeadersObject);
-        return res.status(204).send(``);
+        res.status(204).send(``);
+        return;
       }
 
       if (req.url === `/.well-known/apollo/server-health`) {
-        const successfulResponse = () => {
+        const successfulResponse = (): VercelResponse => {
           setHeaders(res, {
             "Content-Type": `application/json`,
             ...requestCorsHeadersObject
@@ -123,24 +110,26 @@ export class ApolloServer extends ApolloServerBase {
         };
         if (onHealthCheck) {
           try {
-            await onHealthCheck(req);
+            void onHealthCheck(req);
             successfulResponse();
           } catch {
             setHeaders(res, {
               "Content-Type": `application/json`,
               ...requestCorsHeadersObject
             });
-            return res.status(503).json({ status: `fail` });
+            res.status(503).json({ status: `fail` });
+            return;
           }
         } else {
-          return successfulResponse();
+          successfulResponse();
+          return;
         }
       }
 
       if (this.playgroundOptions && req.method === `GET`) {
-        const acceptHeader = req.headers.Accept || req.headers.accept;
-        if (acceptHeader && acceptHeader.includes(`text/html`)) {
-          const path = req.url || `/`;
+        const acceptHeader = req.headers.Accept ?? req.headers.accept;
+        if (acceptHeader?.includes(`text/html`)) {
+          const path = req.url ?? `/`;
           const playgroundRenderPageOptions: PlaygroundRenderPageOptions = {
             endpoint: path,
             ...this.playgroundOptions
@@ -150,37 +139,50 @@ export class ApolloServer extends ApolloServerBase {
             "Content-Type": `text/html`,
             ...requestCorsHeadersObject
           });
-          return res.status(200).send(renderPlaygroundPage(playgroundRenderPageOptions));
+          res.status(200).send(renderPlaygroundPage(playgroundRenderPageOptions));
+          return;
         }
       }
 
-      const fileUploadHandler = async (next: Function) => {
-        const contentType = req.headers[`content-type`] || req.headers[`Content-Type`];
+      type NextFunction = () => Promise<void>;
+
+      const fileUploadHandler = async (next: NextFunction): Promise<void> => {
+        const contentType = req.headers[`content-type`] ?? req.headers[`Content-Type`];
         if (
           contentType &&
           (contentType as string).startsWith(`multipart/form-data`) &&
           typeof processFileUploads === `function`
         ) {
           try {
-            req.body = await processFileUploads(req, res, this.uploadsConfig || {});
-            return next();
-          } catch (error) {
-            throw formatApolloErrors([error], {
-              formatter: this.requestOptions.formatError,
-              debug: this.requestOptions.debug
-            });
+            // eslint-disable-next-line require-atomic-updates
+            req.body = await processFileUploads(req, res, this.uploadsConfig ?? {});
+            await next();
+          } catch (error: unknown) {
+            if (error instanceof Error) {
+              // eslint-disable-next-line @typescript-eslint/no-throw-literal
+              throw formatApolloErrors([error], {
+                formatter: this.requestOptions.formatError,
+                debug: this.requestOptions.debug
+              });
+            }
           }
         } else {
-          return next();
+          await next();
         }
       };
 
-      return fileUploadHandler(() =>
-        graphqlVercel(async () => {
-          await promiseWillStart;
-          return this.createGraphQLServerOptions(req, res);
-        })(req, res)
-      );
+      const handleGraphQLRequest = async (): Promise<void> => {
+        await willStart;
+        if (cors) {
+          setHeaders(res, {
+            ...requestCorsHeadersObject
+          });
+        }
+        const options = await this.createGraphQLServerOptions(req, res);
+        graphqlVercel(options)(req, res);
+      };
+
+      await fileUploadHandler(handleGraphQLRequest);
     };
   }
 }

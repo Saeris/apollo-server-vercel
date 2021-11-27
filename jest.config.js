@@ -7,7 +7,7 @@ const { name } = require(`./package.json`);
 module.exports = {
   displayName: name,
   testRunner: `jest-circus/runner`,
-  coverageDirectory: `./.coverage/`,
+  coverageDirectory: `./coverage/`,
   collectCoverage: true,
   collectCoverageFrom: [
     // include
