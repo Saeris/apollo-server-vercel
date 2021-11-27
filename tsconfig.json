@@ -14,6 +14,6 @@
     "moduleResolution": "node",
     "sourceMap": true
   },
-  "include": ["./src/**/*"],
+  "include": ["./src/**/*", "./api/**/*"],
   "exclude": ["node_modules", "**/__mocks__/**/*", "**/__test__/**/*", "**/*.spec.ts"]
 }
