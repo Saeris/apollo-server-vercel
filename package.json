@@ -20,7 +20,8 @@
     "url": "https://github.com/saeris/apollo-server-vercel/issues"
   },
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "registry": "https://registry.npmjs.org"
   },
   "main": "src/index.js",
   "engines": {
@@ -31,7 +32,7 @@
     "build": "pika build",
     "build:docs": "fiddly",
     "lint": "yarn test:lint",
-    "release": "pika build && np --contents pkg/",
+    "release": "np",
     "start": "vercel dev",
     "test": "yarn test:lint && yarn test:typecheck && yarn test:unit",
     "test:lint": "eslint \"./src/**/*.{j,t}s?(x)\"",
@@ -39,7 +40,7 @@
     "test:unit": "jest",
     "test:watch": "yarn test:unit --watch",
     "typecheck": "yarn test:typecheck",
-    "version": "npm run build"
+    "version": "yarn build"
   },
   "dependencies": {
     "@apollographql/graphql-playground-html": "1.6.29",
@@ -100,6 +101,9 @@
         "@pika/plugin-build-types"
       ]
     ]
+  },
+  "np": {
+    "contents": "pkg"
   },
   "husky": {
     "hooks": {
