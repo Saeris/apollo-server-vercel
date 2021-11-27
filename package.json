@@ -102,9 +102,6 @@
       ]
     ]
   },
-  "np": {
-    "contents": "pkg"
-  },
   "husky": {
     "hooks": {
       "pre-commit": "lint-staged"
