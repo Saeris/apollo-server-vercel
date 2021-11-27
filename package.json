@@ -24,7 +24,7 @@
   },
   "main": "src/index.js",
   "engines": {
-    "node": ">=12"
+    "node": ">=12 <15"
   },
   "scripts": {
     "ci": "yarn install --ignore-scripts --frozen-lockfile --silent --non-interactive",
@@ -44,7 +44,7 @@
   "dependencies": {
     "@apollographql/graphql-playground-html": "1.6.29",
     "@vercel/node": "^1.12.1",
-    "apollo-server-core": "^2.16.1"
+    "apollo-server-core": "2.25.3"
   },
   "devDependencies": {
     "@babel/core": "^7.16.0",
