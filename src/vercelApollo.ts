@@ -23,7 +23,7 @@ export function graphqlVercel(options: GraphQLOptions | VercelGraphQLOptionsFunc
       const { graphqlResponse, responseInit } = await runHttpQuery([req, res], {
         method: req.method!,
         options,
-        query: req.body || req.query,
+        query: req.method === `POST` ? req.body : req.query,
         request: convertNodeHttpToRequest(req)
       });
       setHeaders(res, responseInit.headers ?? {});
