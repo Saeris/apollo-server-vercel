@@ -1,7 +1,7 @@
 {
   "name": "@saeris/apollo-server-vercel",
   "description": "Production-ready Node.js GraphQL server for Vercel Serverless Functions",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "keywords": [
     "GraphQL",
     "Apollo",
