@@ -4,7 +4,9 @@
 
 ---
 
-> Note: These docs are subject to change, as this library is under construction. Expect things to be broken!
+> **Warning**
+>
+> This project is now deprecated! Please use the official Apollo Server integration for Nextjs instead: https://github.com/apollo-server-integrations/apollo-server-integration-next#readme
 
 ## 📦 Installation
 
